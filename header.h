@@ -18,6 +18,12 @@
 #include <math.h>
 #include <cstring>
 
+
+#define TOP 0
+#define BOTTOM 512
+#define LEFT 0
+#define RIGHT 1366
+
 using namespace std;
 
 #endif
