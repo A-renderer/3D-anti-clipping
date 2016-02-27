@@ -8,6 +8,6 @@ class ThreeDimension {
 		ThreeDimension();
 		void scanLine();
 
-		int* intersection(Polygon pol, int y);
+		int* intersection(Polygon pol, int y, float slope[]);
 
 }
