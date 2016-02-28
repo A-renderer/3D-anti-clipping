@@ -7,10 +7,36 @@ ThreeDimension::ThreeDimension(){
 
 ThreeDimension::ThreeDimension(vector<Point> pol) {
 	frontside = Polygon(pol);
-	frontside.moveUp(10);
-	frontside.moveRight(10);
 
 	backside = Polygon(pol);
+	backside.moveUp(10);
+	backside.moveRight(10);
+
+	for (int i=0; i<pol.size()-1; i++) {
+		lines.push_back(Line(frontside.e[i], backside.e[i]));
+
+		vector<Point> temp;
+		if (i==pol.size()-1) {
+			temp.push_back(frontside.e[i]);
+			temp.push_back(frontside.e[0]);
+			temp.push_back(backside.e[0]);
+			temp.push_back(backside.e[i]);
+		} else {
+			temp.push_back(frontside.e[i]);
+			temp.push_back(frontside.e[i+1]);
+			temp.push_back(backside.e[i+1]);
+			temp.push_back(backside.e[i]);
+		}
+		p.push_back(Polygon(temp));
+	}
+}
+
+ThreeDimension::ThreeDimension(vector<Point> pol, int d) {
+	frontside = Polygon(pol);
+
+	backside = Polygon(pol);
+	backside.moveUp(d);
+	backside.moveRight(d);
 
 	for (int i=0; i<pol.size()-1; i++) {
 		lines.push_back(Line(frontside.e[i], backside.e[i]));

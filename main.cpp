@@ -49,7 +49,13 @@ int main() {
 
 	system("clear");
 
-	drawMap();
+	FB.drawPolygon(map_border,0, 255, 255,0);
+	FB.rasterScan(map_border,135, 206, 235, 0);
+	ThreeDimension kotak3D (matrixToPolygon(kotak,sizeof(kotak)/sizeof(*kotak)), 50);
+	FB.draw3D(kotak3D,0,0,0,0);
+	FB.scanLine3D(kotak3D,0,50,0,0);
+
+	//drawMap();
 
 	/*while(!quit){
 		if(kbhit()){

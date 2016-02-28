@@ -296,7 +296,7 @@ public:
 		drawPolygon(obj.frontside,r,g,b,t);
 		for(int i=0; i<obj.p.size(); i++){
 			drawPolygon(obj.p[i],r,g,b,t);
-			drawLine(obj.lines[i].src, obj.lines[i].dest, 255, 255, 255, 0);
+			drawLine(obj.lines[i].src, obj.lines[i].dest, r, g, b, t);
 		}
 
 		/*for(int i=0; i<obj.lines.size(); i++){
@@ -503,6 +503,11 @@ public:
 				}
 
 			}
+		}
+
+		for(int i=0; i<obj.p.size(); i++){
+			drawPolygon(obj.p[i],r,g,b,a);
+			drawLine(obj.lines[i].src, obj.lines[i].dest, r, g, b, a);
 		}
 	}
 

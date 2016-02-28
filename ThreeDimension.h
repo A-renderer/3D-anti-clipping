@@ -16,6 +16,7 @@ class ThreeDimension {
 
 		ThreeDimension();
 		ThreeDimension(vector<Point> pol);
+		ThreeDimension(vector<Point> pol, int d);
 		ThreeDimension(const ThreeDimension& p);
 		ThreeDimension& operator=(const ThreeDimension& p);
 		void moveLeft (float dx);
