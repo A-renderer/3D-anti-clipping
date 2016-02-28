@@ -24,6 +24,7 @@ ThreeDimension p_kalimantan(matrixToPolygon(kalimantan,sizeof(kalimantan)/sizeof
 ThreeDimension p_sulawesi(matrixToPolygon(sulawesi,sizeof(sulawesi)/sizeof(*sulawesi)));
 ThreeDimension p_papua(matrixToPolygon(papua,sizeof(papua)/sizeof(*papua)));
 ThreeDimension p_jawa(matrixToPolygon(jawa,sizeof(jawa)/sizeof(*jawa)));
+ThreeDimension kotak3D (matrixToPolygon(kotak,sizeof(kotak)/sizeof(*kotak)), 30);
 
 int main() {
 	// Adjust positions of the islands
@@ -51,21 +52,26 @@ int main() {
 
 	FB.drawPolygon(map_border,0, 255, 255,0);
 	FB.rasterScan(map_border,135, 206, 235, 0);
-	ThreeDimension kotak3D (matrixToPolygon(kotak,sizeof(kotak)/sizeof(*kotak)), 50);
-	FB.draw3D(kotak3D,0,0,0,0);
-	FB.scanLine3D(kotak3D,0,50,0,0);
+	
+	for (int i=0; i<10; i++){
+		FB.rasterScan(map_border,135, 206, 235, 0);
+		FB.draw3D(kotak3D,0,0,0,0);
+		FB.scanLine3D(kotak3D,0,50,0,0);
+		kotak3D.rotate(2);
+		sleep(1);
+	}
 
-	//drawMap();
+	/*drawMap();
 
-	/*while(!quit){
+	while(!quit){
 		if(kbhit()){
 			key=getchar();
 			//PANGGIL FUNGSI UNTUK REDRAW MOVEMENT
 			move(key);
 		}
-	}*/
+	}
 
-	//system("clear");
+	system("clear");*/
 
 	return 0;
 }
@@ -108,11 +114,15 @@ void drawMap() {
 	FB.drawPolygon(map_border,0, 255, 255,0);
 	FB.rasterScan(map_border,135, 206, 235, 0);
 	FB.draw3D(p_sumatra,0,100,0,0);
-	FB.scanLine3D(p_sumatra,0,50,0,0);
+	//FB.scanLine3D(p_sumatra,0,50,0,0);
 	FB.draw3D(p_kalimantan,0,100,0,0);
+	FB.scanLine3D(p_kalimantan,0,50,0,0);
 	FB.draw3D(p_sulawesi,0,100,0,0);
+	//FB.scanLine3D(p_sulawesi,0,50,0,0);
 	FB.draw3D(p_papua,0,100,0,0);
+	//FB.scanLine3D(p_papua,0,50,0,0);
 	FB.draw3D(p_jawa,0,100,0,0);
+	FB.scanLine3D(p_jawa,0,50,0,0);
 }
 
 void move(int key) {

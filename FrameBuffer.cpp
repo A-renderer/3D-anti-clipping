@@ -294,14 +294,6 @@ public:
 	void draw3D(ThreeDimension obj, int r, int g, int b, int t){
 		drawPolygon(obj.backside,r,g,b,t);
 		drawPolygon(obj.frontside,r,g,b,t);
-		for(int i=0; i<obj.p.size(); i++){
-			drawPolygon(obj.p[i],r,g,b,t);
-			drawLine(obj.lines[i].src, obj.lines[i].dest, r, g, b, t);
-		}
-
-		/*for(int i=0; i<obj.lines.size(); i++){
-			drawLine(obj.lines[i].src, P3d.L[i].dest, 255, 255, 255, 0);
-		}*/
 	}
 
 
@@ -506,7 +498,6 @@ public:
 		}
 
 		for(int i=0; i<obj.p.size(); i++){
-			drawPolygon(obj.p[i],r,g,b,a);
 			drawLine(obj.lines[i].src, obj.lines[i].dest, r, g, b, a);
 		}
 	}

@@ -138,3 +138,45 @@ void ThreeDimension::scale (float k) {
 		p.push_back(Polygon(temp));
 	}
 }
+
+void ThreeDimension::rotate(float k){
+	int fcenter = frontside.getMidX();
+	int bcenter = backside.getMidX();
+	
+	for (int i=0; i<frontside.e.size(); i++){
+		if (frontside.e[i].x < fcenter){
+			frontside.e[i].x += k;
+			frontside.e[i].y -= k;
+			backside.e[i].x += k;
+			backside.e[i].y -= k;
+		} else if (frontside.e[i].x > fcenter) {
+			frontside.e[i].x -= k;
+			frontside.e[i].y += k;
+			backside.e[i].x -= k;
+			backside.e[i].y += k;
+		} else { //frontside.e[i].x == fcenter
+			// do nothing
+		}
+	}
+
+	lines.clear();
+	p.clear();
+
+	for (int i=0; i<frontside.e.size()-1; i++) {
+		lines.push_back(Line(frontside.e[i], backside.e[i]));
+
+		vector<Point> temp;
+		if (i==frontside.e.size()-1) {
+			temp.push_back(frontside.e[i]);
+			temp.push_back(frontside.e[0]);
+			temp.push_back(backside.e[0]);
+			temp.push_back(backside.e[i]);
+		} else {
+			temp.push_back(frontside.e[i]);
+			temp.push_back(frontside.e[i+1]);
+			temp.push_back(backside.e[i+1]);
+			temp.push_back(backside.e[i]);
+		}
+		p.push_back(Polygon(temp));
+	}
+}
