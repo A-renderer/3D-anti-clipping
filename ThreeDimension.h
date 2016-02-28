@@ -24,7 +24,7 @@ class ThreeDimension {
 		void moveUp (float dy);
 		void moveDown (float dy);
 		void scale(float k);
-		void rotate(float k);
+		void rotate(int k);
 };
 
 #endif

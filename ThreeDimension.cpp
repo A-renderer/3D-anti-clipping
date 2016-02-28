@@ -139,21 +139,21 @@ void ThreeDimension::scale (float k) {
 	}
 }
 
-void ThreeDimension::rotate(float k){
+void ThreeDimension::rotate(int k){
 	int fcenter = frontside.getMidX();
 	int bcenter = backside.getMidX();
 	
 	for (int i=0; i<frontside.e.size(); i++){
 		if (frontside.e[i].x < fcenter){
 			frontside.e[i].x += k;
-			frontside.e[i].y -= k;
+			frontside.e[i].y -= k/2;
 			backside.e[i].x += k;
-			backside.e[i].y -= k;
+			backside.e[i].y -= k/2;
 		} else if (frontside.e[i].x > fcenter) {
 			frontside.e[i].x -= k;
-			frontside.e[i].y += k;
+			frontside.e[i].y += k/2;
 			backside.e[i].x -= k;
-			backside.e[i].y += k;
+			backside.e[i].y += k/2;
 		} else { //frontside.e[i].x == fcenter
 			// do nothing
 		}
