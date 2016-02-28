@@ -32,8 +32,8 @@ int main() {
 	p_jawa.moveDown(265);
 	p_jawa.moveRight(170);
 	p_kalimantan.scale(1.55);
-	p_kalimantan.moveRight(40);
-	p_kalimantan.moveDown(40);
+	p_kalimantan.moveRight(150);
+	p_kalimantan.moveDown(50);
 	p_sulawesi.scale(1.25);
 	p_sulawesi.moveRight(320);
 	p_sulawesi.moveDown(100);
@@ -102,10 +102,10 @@ void drawMap() {
 	FB.drawPolygon(map_border,0, 255, 255,0);
 	FB.rasterScan(map_border,135, 206, 235, 0);
 	FB.draw3D(p_sumatra,0,100,0,0);
-	//FB.draw3D(p_kalimantan,0,100,0,0);
-	//FB.draw3D(p_sulawesi,0,100,0,0);
-	//FB.draw3D(p_papua,0,100,0,0);
-	//FB.draw3D(p_jawa,0,100,0,0);
+	FB.draw3D(p_kalimantan,0,100,0,0);
+	FB.draw3D(p_sulawesi,0,100,0,0);
+	FB.draw3D(p_papua,0,100,0,0);
+	FB.draw3D(p_jawa,0,100,0,0);
 }
 
 void move(int key) {

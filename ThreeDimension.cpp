@@ -49,49 +49,41 @@ ThreeDimension& ThreeDimension::operator=(const ThreeDimension& ob) {
 
 void ThreeDimension::moveLeft (float dx) {
 	int bound = 10;
-	if (frontside.getMinX() < bound && backside.getMinX() > bound){
-		frontside.moveLeft(dx);
-		backside.moveLeft(dx);
-		for(int i = 0; i<lines.size(); i++){
-			lines[i].moveLeft(dx);
-			p[i].moveLeft(dx);
-		}
+	frontside.moveLeft(dx);
+	backside.moveLeft(dx);
+	for(int i = 0; i<lines.size(); i++){
+		lines[i].moveLeft(dx);
+		p[i].moveLeft(dx);
 	}
 }
 
 void ThreeDimension::moveRight (float dx) {
 	int bound = 390;
-	if (frontside.getMinX() > bound && backside.getMinX() < bound){
-		frontside.moveRight(dx);
-		backside.moveRight(dx);
-		for(int i = 0; i<lines.size(); i++){
-			lines[i].moveRight(dx);
-			p[i].moveRight(dx);
-		}
+	frontside.moveRight(dx);
+	backside.moveRight(dx);
+	for(int i = 0; i<lines.size(); i++){
+		lines[i].moveRight(dx);
+		p[i].moveRight(dx);
 	}
 }
 
 void ThreeDimension::moveUp (float dy) {
 	int bound = 10;
-	if (frontside.getMinY() > bound && backside.getMinY() < bound){
-		frontside.moveUp(dy);
-		backside.moveUp(dy);
-		for(int i = 0; i<lines.size(); i++){
-			lines[i].moveUp(dy);
-			p[i].moveUp(dy);
-		}
+	frontside.moveUp(dy);
+	backside.moveUp(dy);
+	for(int i = 0; i<lines.size(); i++){
+		lines[i].moveUp(dy);
+		p[i].moveUp(dy);
 	}
 }
 
 void ThreeDimension::moveDown (float dy) {
 	int bound = 489;
-	if (frontside.getMinY() > bound && backside.getMinY() < bound){
-		frontside.moveDown(dy);
-		backside.moveDown(dy);
-		for(int i = 0; i<lines.size(); i++){
-			lines[i].moveDown(dy);
-			p[i].moveDown(dy);
-		}
+	frontside.moveDown(dy);
+	backside.moveDown(dy);
+	for(int i = 0; i<lines.size(); i++){
+		lines[i].moveDown(dy);
+		p[i].moveDown(dy);
 	}
 }
 
