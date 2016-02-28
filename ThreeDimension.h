@@ -23,10 +23,6 @@ class ThreeDimension {
 		void moveUp (float dy);
 		void moveDown (float dy);
 		void scale(float k);
-
-		void scanLine();
-
-		int* intersection(Polygon pol, int y, float slope[]);
 };
 
 #endif

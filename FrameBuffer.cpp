@@ -249,7 +249,7 @@ public:
 		}
 
 		vector<Line> lines;
-		for (int y=0; y<600; y++) { //600 itu batas pixel paling bawah, masi ngasal wkwkwk
+		for (int y=pol.getMinY(); y<pol.getMaxY(); y++) {
 			int k = 0;
 			// Cari titik perpotongan
 			for (int i=0; i<n; i++) {
@@ -298,9 +298,212 @@ public:
 			drawPolygon(obj.p[i],r,g,b,t);
 			drawLine(obj.lines[i].src, obj.lines[i].dest, 255, 255, 255, 0);
 		}
+
 		/*for(int i=0; i<obj.lines.size(); i++){
 			drawLine(obj.lines[i].src, P3d.L[i].dest, 255, 255, 255, 0);
 		}*/
+	}
+
+
+	void scanLine3D(ThreeDimension obj, int r, int g, int b, int a){
+		// initialize bucket
+		map<int, vector<int> > buckets;
+		for (int i=TOP; i<=BOTTOM; i++){
+			vector<int> bucket;
+			bucket.push_back(LEFT);
+			bucket.push_back(RIGHT);
+			buckets[i] = bucket;
+		}
+
+
+		// WARNAIN FRONT
+		int n = obj.frontside.n;
+
+		float slope[n];
+		int* line;
+		int x,y;
+		for (int i=0; i<n; i++) {
+			int dx = obj.frontside.e[i+1].x - obj.frontside.e[i].x;
+			int dy = obj.frontside.e[i+1].y - obj.frontside.e[i].y;
+
+			if (dy == 0) {
+				slope[i] = 1;
+			}
+			if (dx == 0) {
+				slope[i] = 0;
+			}
+			if (dx != 0 && dy != 0) {
+				slope[i] = (float) dx/dy;
+			}
+		}
+
+		for (int y=obj.frontside.getMinY(); y<obj.frontside.getMaxY(); y++) {
+			// Cari titik perpotongan dan urutkan
+			int k=0;
+			int line[obj.frontside.n];
+			for (int i=0; i<obj.frontside.n; i++) {
+				if (obj.frontside.e[i].y <= y && obj.frontside.e[i+1].y > y || obj.frontside.e[i+1].y <= y && obj.frontside.e[i].y > y) {
+					if (!(obj.frontside.e[i-1].y < obj.frontside.e[i].y && obj.frontside.e[i+1].y < obj.frontside.e[i].y) || !(obj.frontside.e[i-1].y > obj.frontside.e[i].y && obj.frontside.e[i+1].y > obj.frontside.e[i].y)){
+						line[k] = (int) (obj.frontside.e[i].x + slope[i] * (y - obj.frontside.e[i].y));
+						k++;
+					}
+				}
+			}
+
+			// Sorting the lines
+			for (int j=0; j<k-1; j++) {
+				for (int i=0; i<k-1; i++) {
+					if (line[i] > line[i+1]) {
+						int temp = line[i];
+						line[i] = line[i+1];
+						line[i+1] = temp;
+					}
+				}
+			}
+
+
+			for (int i=0; i<k; i+=2) {
+				if(buckets.at(y).empty()) break;
+				
+				for(int j=0;j<buckets.at(y).size();j+=2) {
+					int p = buckets.at(y).at(j);
+					int q = buckets.at(y).at(j+1);
+
+					if(line[i] < p) {
+						if(line[i+1] < p) {
+							// do nothing karena yang mau di gambar ada di sebelah kiri bucket
+							// urutan : line[i]	line[i+1]	p 	q
+						}
+						else if(line[i+1] < q) {
+							
+							drawLine(Point(p, y), Point(line[i+1], y), r, g, b, a);
+							// urutan : line[i]	p 	line[i+1] 	q
+							buckets.at(y).at(j) = line[i+1];
+						}
+						else {
+							drawLine(Point(p, y), Point(q, y), r, g, b, a);
+							// urutan : line[i] p 	q 	line[i+1]
+							buckets.at(y).erase(buckets.at(y).begin()+j); buckets.at(y).erase(buckets.at(y).begin()+j+1);
+							j-=2; // ini bisa ga ya?
+						}
+					}
+					else { // line[i] >= q
+						if(line[i] > q) {
+							// do nothing karena yang mau di gambar ada di sebelah kanan bucket
+							// urutan : p 	q 	line[i]	line[i+1]
+						}
+						else if(line[i+1] < q) {
+							drawLine(Point(line[i], y), Point(line[i+1], y), r, g, b, a);
+							// urutan : p 	line[i]	line[i+1] 	q
+							buckets.at(y).at(j+1) = line[i];
+							buckets.at(y).push_back(line[i+1]);
+							buckets.at(y).push_back(q);
+							break; // karena udah kegambar semua, di break aja
+						}
+						else {
+							drawLine(Point(line[i], y), Point(q, y), r, g, b, a);
+							// urutan : p 	line[i]	q 	line[i+1]
+							buckets.at(y).at(j+1) = line[i];
+						}
+					}
+				}
+
+			}
+		}
+
+
+		// WARNAIN BACK
+
+		n = obj.backside.n;
+
+		for (int i=0; i<n; i++) {
+			int dx = obj.backside.e[i+1].x - obj.backside.e[i].x;
+			int dy = obj.backside.e[i+1].y - obj.backside.e[i].y;
+
+			if (dy == 0) {
+				slope[i] = 1;
+			}
+			if (dx == 0) {
+				slope[i] = 0;
+			}
+			if (dx != 0 && dy != 0) {
+				slope[i] = (float) dx/dy;
+			}
+		}
+
+		for (int y=obj.backside.getMinY(); y<obj.backside.getMaxY(); y++) {
+			// Cari titik perpotongan dan urutkan
+			int k=0;
+			int line[obj.backside.n];
+			for (int i=0; i<obj.backside.n; i++) {
+				if (obj.backside.e[i].y <= y && obj.backside.e[i+1].y > y || obj.backside.e[i+1].y <= y && obj.backside.e[i].y > y) {
+					if (!(obj.backside.e[i-1].y < obj.backside.e[i].y && obj.backside.e[i+1].y < obj.backside.e[i].y) || !(obj.backside.e[i-1].y > obj.backside.e[i].y && obj.backside.e[i+1].y > obj.backside.e[i].y)){
+						line[k] = (int) (obj.backside.e[i].x + slope[i] * (y - obj.backside.e[i].y));
+						k++;
+					}
+				}
+			}
+
+			// Sorting the lines
+			for (int j=0; j<k-1; j++) {
+				for (int i=0; i<k-1; i++) {
+					if (line[i] > line[i+1]) {
+						int temp = line[i];
+						line[i] = line[i+1];
+						line[i+1] = temp;
+					}
+				}
+			}
+
+
+			for (int i=0; i<k; i+=2) {
+				if(buckets.at(y).empty()) break;
+				
+				for(int j=0;j<buckets.at(y).size();j+=2) {
+					int p = buckets.at(y).at(j);
+					int q = buckets.at(y).at(j+1);
+
+					if(line[i] < p) {
+						if(line[i+1] < p) {
+							// do nothing karena yang mau di gambar ada di sebelah kiri bucket
+							// urutan : line[i]	line[i+1]	p 	q
+						}
+						else if(line[i+1] < q) {
+							
+							drawLine(Point(p, y), Point(line[i+1], y), r, g+100, b, a);
+							// urutan : line[i]	p 	line[i+1] 	q
+							buckets.at(y).at(j) = line[i+1];
+						}
+						else {
+							drawLine(Point(p, y), Point(q, y), r, g+100, b, a);
+							// urutan : line[i] p 	q 	line[i+1]
+							buckets.at(y).erase(buckets.at(y).begin()+j); buckets.at(y).erase(buckets.at(y).begin()+j+1);
+							j-=2; // ini bisa ga ya?
+						}
+					}
+					else { // line[i] >= q
+						if(line[i] > q) {
+							// do nothing karena yang mau di gambar ada di sebelah kanan bucket
+							// urutan : p 	q 	line[i]	line[i+1]
+						}
+						else if(line[i+1] < q) {
+							drawLine(Point(line[i], y), Point(line[i+1], y), r, g+100, b, a);
+							// urutan : p 	line[i]	line[i+1] 	q
+							buckets.at(y).at(j+1) = line[i];
+							buckets.at(y).push_back(line[i+1]);
+							buckets.at(y).push_back(q);
+							break; // karena udah kegambar semua, di break aja
+						}
+						else {
+							drawLine(Point(line[i], y), Point(q, y), r, g+100, b, a);
+							// urutan : p 	line[i]	q 	line[i+1]
+							buckets.at(y).at(j+1) = line[i];
+						}
+					}
+				}
+
+			}
+		}
 	}
 
 private:

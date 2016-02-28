@@ -9,7 +9,7 @@ using namespace std;
 
 FrameBuffer FB;
 bool quit = false;
-vector<ThreeDimension> map;
+vector<ThreeDimension> peta;
 int key;
 
 int kbhit(void);
@@ -41,11 +41,11 @@ int main() {
 	p_papua.moveRight(430);
 	p_papua.moveDown(160);
 
-	map.push_back(p_sumatra);
-	map.push_back(p_jawa);
-	map.push_back(p_kalimantan);
-	map.push_back(p_sulawesi);
-	map.push_back(p_papua);
+	peta.push_back(p_sumatra);
+	peta.push_back(p_jawa);
+	peta.push_back(p_kalimantan);
+	peta.push_back(p_sulawesi);
+	peta.push_back(p_papua);
 
 	system("clear");
 
@@ -102,6 +102,7 @@ void drawMap() {
 	FB.drawPolygon(map_border,0, 255, 255,0);
 	FB.rasterScan(map_border,135, 206, 235, 0);
 	FB.draw3D(p_sumatra,0,100,0,0);
+	FB.scanLine3D(p_sumatra,0,50,0,0);
 	FB.draw3D(p_kalimantan,0,100,0,0);
 	FB.draw3D(p_sulawesi,0,100,0,0);
 	FB.draw3D(p_papua,0,100,0,0);
