@@ -1,9 +1,127 @@
 #include "ThreeDimension.h"
 
 ThreeDimension::ThreeDimension(){
-
+	frontside = Polygon();
+	backside = Polygon();
 }
-void ThreeDimension::scanLine(){
+
+ThreeDimension::ThreeDimension(vector<Point> pol) {
+	frontside = Polygon(pol);
+	frontside.moveUp(10);
+	frontside.moveRight(10);
+
+	backside = Polygon(pol);
+
+	for (int i=0; i<pol.size()-1; i++) {
+		lines.push_back(Line(frontside.e[i], backside.e[i]));
+
+		vector<Point> temp;
+		if (i==pol.size()-1) {
+			temp.push_back(frontside.e[i]);
+			temp.push_back(frontside.e[0]);
+			temp.push_back(backside.e[0]);
+			temp.push_back(backside.e[i]);
+		} else {
+			temp.push_back(frontside.e[i]);
+			temp.push_back(frontside.e[i+1]);
+			temp.push_back(backside.e[i+1]);
+			temp.push_back(backside.e[i]);
+		}
+		p.push_back(Polygon(temp));
+	}
+}
+
+ThreeDimension::ThreeDimension(const ThreeDimension& ob) {
+	frontside = ob.frontside;
+	backside = ob.backside;
+	lines = ob.lines;
+	p = ob.p;
+}
+
+ThreeDimension& ThreeDimension::operator=(const ThreeDimension& ob) {
+	frontside = ob.frontside;
+	backside = ob.backside;
+	lines = ob.lines;
+	p = ob.p;
+
+	return *this;
+}
+
+void ThreeDimension::moveLeft (float dx) {
+	int bound = 10;
+	if (frontside.getMinX() < bound && backside.getMinX() > bound){
+		frontside.moveLeft(dx);
+		backside.moveLeft(dx);
+		for(int i = 0; i<lines.size(); i++){
+			lines[i].moveLeft(dx);
+			p[i].moveLeft(dx);
+		}
+	}
+}
+
+void ThreeDimension::moveRight (float dx) {
+	int bound = 390;
+	if (frontside.getMinX() > bound && backside.getMinX() < bound){
+		frontside.moveRight(dx);
+		backside.moveRight(dx);
+		for(int i = 0; i<lines.size(); i++){
+			lines[i].moveRight(dx);
+			p[i].moveRight(dx);
+		}
+	}
+}
+
+void ThreeDimension::moveUp (float dy) {
+	int bound = 10;
+	if (frontside.getMinY() > bound && backside.getMinY() < bound){
+		frontside.moveUp(dy);
+		backside.moveUp(dy);
+		for(int i = 0; i<lines.size(); i++){
+			lines[i].moveUp(dy);
+			p[i].moveUp(dy);
+		}
+	}
+}
+
+void ThreeDimension::moveDown (float dy) {
+	int bound = 489;
+	if (frontside.getMinY() > bound && backside.getMinY() < bound){
+		frontside.moveDown(dy);
+		backside.moveDown(dy);
+		for(int i = 0; i<lines.size(); i++){
+			lines[i].moveDown(dy);
+			p[i].moveDown(dy);
+		}
+	}
+}
+
+void ThreeDimension::scale (float k) {
+	frontside.scale(k);
+	backside.scale(k);
+
+	p.clear();
+	lines.clear();
+
+	for (int i=0; i<frontside.e.size()-1; i++) {
+		lines.push_back(Line(frontside.e[i], backside.e[i]));
+
+		vector<Point> temp;
+		if (i==frontside.e.size()-1) {
+			temp.push_back(frontside.e[i]);
+			temp.push_back(frontside.e[0]);
+			temp.push_back(backside.e[0]);
+			temp.push_back(backside.e[i]);
+		} else {
+			temp.push_back(frontside.e[i]);
+			temp.push_back(frontside.e[i+1]);
+			temp.push_back(backside.e[i+1]);
+			temp.push_back(backside.e[i]);
+		}
+		p.push_back(Polygon(temp));
+	}
+}
+
+/*void ThreeDimension::scanLine(){
 	// The usual method starts with edges of projected polygons inserted into buckets, one per scanline; the rasterizer maintains an active edge table (AET). Entries maintain sort links, X coordinates, gradients, and references to the polygons they bound. To rasterize the next scanline, the edges no longer relevant are removed; new edges from the current scanlines' Y-bucket are added, inserted sorted by X coordinate. The active edge table entries have X and other parameter information incremented. Active edge table entries are maintained in an X-sorted list by bubble sort, effecting a change when 2 edges cross. After updating edges, the active edge table is traversed in X order to emit only the visible spans, maintaining a Z-sorted active Span table, inserting and deleting the surfaces when edges are crossed.
 
 	int n = pol.n;
@@ -108,4 +226,4 @@ int* ThreeDimension::intersection(Polygon pol, int y, float slope[]) {
 	}
 
 	return line;
-}
+}*/
