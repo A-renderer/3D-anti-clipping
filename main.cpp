@@ -28,50 +28,41 @@ ThreeDimension kotak3D (matrixToPolygon(kotak,sizeof(kotak)/sizeof(*kotak)), 30)
 
 int main() {
 	// Adjust positions of the islands
-	p_sumatra.moveDown(10);
-	p_jawa.scale(1.8);
-	p_jawa.moveDown(265);
-	p_jawa.moveRight(170);
-	p_kalimantan.scale(1.55);
-	p_kalimantan.moveRight(150);
-	p_kalimantan.moveDown(50);
-	p_sulawesi.scale(1.25);
-	p_sulawesi.moveRight(320);
-	p_sulawesi.moveDown(100);
-	p_papua.scale(2);
-	p_papua.moveRight(430);
-	p_papua.moveDown(160);
-
-	peta.push_back(p_sumatra);
-	peta.push_back(p_jawa);
-	peta.push_back(p_kalimantan);
-	peta.push_back(p_sulawesi);
-	peta.push_back(p_papua);
-
 	system("clear");
-
-	FB.drawPolygon(map_border,0, 255, 255,0);
 	FB.rasterScan(map_border,135, 206, 235, 0);
-	
-	for (int i=0; i<10; i++){
-		FB.rasterScan(map_border,135, 206, 235, 0);
-		FB.draw3D(kotak3D,0,0,0,0);
-		FB.scanLine3D(kotak3D,0,50,0,0);
-		kotak3D.rotate(2);
-		sleep(1);
-	}
+	FB.draw3D(kotak3D,0,0,0,0);
+	FB.scanLine3D(kotak3D,0,50,0,0);
 
-	/*drawMap();
-
+	int rotation = 0;
 	while(!quit){
 		if(kbhit()){
+			FB.rasterScan(map_border,135, 206, 235, 0);
+			FB.draw3D(kotak3D,0,0,0,0);
+			FB.scanLine3D(kotak3D,0,50,0,0);
+			
 			key=getchar();
 			//PANGGIL FUNGSI UNTUK REDRAW MOVEMENT
-			move(key);
+			if(key=='a' && rotation <= 10) {
+				FB.rasterScan(map_border,135, 206, 235, 0);
+				FB.draw3D(kotak3D,0,0,0,0);
+				FB.scanLine3D(kotak3D,0,50,0,0);
+				kotak3D.rotate(2);
+				rotation++;
+			}
+			else if(key=='d' && rotation > 0) {
+				FB.rasterScan(map_border,135, 206, 235, 0);
+				FB.draw3D(kotak3D,0,0,0,0);
+				FB.scanLine3D(kotak3D,0,50,0,0);
+				kotak3D.rotate(-2);
+				rotation--;
+			}
+			else if(key=='q') {
+				quit = true;
+			}
 		}
 	}
 
-	system("clear");*/
+	
 
 	return 0;
 }
